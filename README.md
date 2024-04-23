@@ -1,4 +1,4 @@
-# JustPlay case study
+# Case study
 ## Composition
 This is a docker-compose build that consists of 4 parts:
 + python_app - Processing container with python application.
