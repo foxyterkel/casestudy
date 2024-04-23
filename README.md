@@ -27,9 +27,9 @@ Query sample:
 
 Tables are created in the `init.sql` script that runs during table initialisation.
 
-POSTGRES_DB: my_data_wh_db
-POSTGRES_USER: my_data_wh_user
-POSTGRES_PASSWORD: my_data_wh_pwd
+- POSTGRES_DB: my_data_wh_db
+- POSTGRES_USER: my_data_wh_user
+- POSTGRES_PASSWORD: my_data_wh_pwd
 
 ### grafana
 Default dataSource is configured in `datasource.yaml` 
