@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+## Python ##
+.pydevproject
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+__pycache__
+env/
+venv/
+.coverage
+**/Pipfile
+**/Pipfile.lock
+
+
+/var/
+
+pg_grafana
+grafana
+pg_data_wh

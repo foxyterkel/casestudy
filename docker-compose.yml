@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  pg_data_wh:
+    container_name: pg_data_wh
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: my_data_wh_db
+      POSTGRES_USER: my_data_wh_user
+      POSTGRES_PASSWORD: my_data_wh_pwd
+    ports:
+      - "5488:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pg_data_wh:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d my_data_wh_db -U my_data_wh_user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pg_grafana:
+    container_name: pg_grafana
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: my_grafana_db
+      POSTGRES_USER: my_grafana_user
+      POSTGRES_PASSWORD: my_grafana_pwd
+    ports:
+      - "5499:5432"
+    volumes:
+      - pg_grafana:/var/lib/postgresql/data
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    user: "0:0"
+    environment:
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_HOST: pg_grafana:5432
+      GF_DATABASE_NAME: my_grafana_db
+      GF_DATABASE_USER: my_grafana_user
+      GF_DATABASE_PASSWORD: my_grafana_pwd
+      GF_DATABASE_SSL_MODE: disable
+    restart: unless-stopped
+    depends_on:
+        - pg_grafana
+    ports:
+      - 3111:3000
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+
+  python_app:
+    build:
+      context: file_processor
+      dockerfile: Dockerfile
+    depends_on:
+      pg_data_wh:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: pg_data_wh
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: my_data_wh_db
+      POSTGRES_USER: my_data_wh_user
+      POSTGRES_PASSWORD: my_data_wh_pwd
+      POSTGRES_RESULT_TABLE: student_performance
+      POSTGRES_IMPORT_TABLE: import_job
+
+volumes:
+  pg_grafana:
+    driver: local
+  grafana:
+    driver: local
+  pg_data_wh:
+    driver: local
+
