@@ -14,7 +14,7 @@ This approach gives as ability to choose any orchestration we like and still run
 We can trigger it through Airflow, GCP scheduler, Amazon EventBridge Scheduler etc.
 The application composed of 3 extendable pieces:
 + data-provider - provides the data, current implementation rely on local file, but we can easily extend it to use GCS or S3 
-+ processor - the place where all processing logic encapsulated, it's straightforward atm but can be extended to have some aggregations and complex transformations.
++ processor - the place where all processing logic encapsulated, we also can do validation and metrics consolidation here.
 + writer - writes transformed data to datasource, currently writes at Postgres but can be extended to handle other types of storage.
 
 ### pg_data_wh
