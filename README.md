@@ -34,3 +34,16 @@ POSTGRES_PASSWORD: my_data_wh_pwd
 ### grafana
 Default dataSource is configured in `datasource.yaml` 
 Default user `admin` with password `admin`
+
+
+
+Q: What could be done if data volume increases 100x?
+A: At the moment source file size is 57 kb. I would say we're on a safe side here to increase the load 10 000 times and the solution will handle it.
+Container resource adjustments might be needed. For the further increase it's a good practice to split files in chunks and we can easily orchestrate the solution to process different files in parallel.
+
+
+Q: What could be done if data is delivered frequently at 6am every two days?
+A: As processing is made on the Docker container we have flexibility to schedule processing as we need it, so there is no issue in this matter.
+
+Q: What could be done if the data has to be made available to a bigger organization of 1000+ people?
+As Grafana performs read only the solution should perform well at this scale. However, for the further user increase we might consider read-only replicas.
