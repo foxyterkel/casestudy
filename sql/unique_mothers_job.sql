@@ -1,0 +1,1 @@
+select distinct mjob from student_performance where age<20;
